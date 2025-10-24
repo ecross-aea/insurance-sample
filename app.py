@@ -247,7 +247,9 @@ def main() -> None:
     # Locate the header illustration relative to this script
     header_path = Path(__file__).parent / "static" / "header.png"
     if header_path.exists():
-        st.image(str(header_path), use_column_width=False, width=350)
+        # Display the header image.  ``use_column_width`` is deprecated in recent Streamlit
+        # releases, so rely solely on the ``width`` argument to control the size.
+        st.image(str(header_path), width=350)
     st.title("Car Insurance Chatbot")
     st.write(
         "Ask me about car insurance coverage, example policy plans or premiums."
