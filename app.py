@@ -26,6 +26,8 @@ project's root for deployment instructions.
 
 import re
 from pathlib import Path
+import time
+import random
 import streamlit as st
 
 
@@ -264,16 +266,23 @@ def main() -> None:
     # Chat input
     user_input = st.chat_input("Type your question here...")
     if user_input:
-        # Append user's message to history
+        # Append the user's message to the history and display it
         st.session_state.messages.append({"role": "user", "content": user_input})
-        # Generate reply
-        reply = answer_question(user_input)
-        st.session_state.messages.append({"role": "assistant", "content": reply})
-        # Display user's message and reply immediately
         with st.chat_message("user"):
             st.markdown(user_input)
+
+        # Simulate thinking before replying.  We show a spinner to
+        # indicate that the chatbot is processing the query.  A random delay
+        # between 2 and 3 seconds makes the interaction feel more natural.
         with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                # Delay for 2–3 seconds
+                time.sleep(random.uniform(2.0, 3.0))
+            # After the delay, generate the reply and display it
+            reply = answer_question(user_input)
             st.markdown(reply)
+        # Append the assistant's response to the history
+        st.session_state.messages.append({"role": "assistant", "content": reply})
 
 
 if __name__ == "__main__":
